@@ -8,8 +8,6 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'WooCommerce' ) ) return;
-
 /* Write the WC "recently viewed" cookie only on single product pages */
 add_action( 'template_redirect', function () {
     if ( function_exists('is_product') 
