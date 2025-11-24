@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * 1. RETRIEVE IDs
- * We rely PURELY on the cookie now, because Complianz handles the logic.
  */
 function rvp_get_recent_ids( $limit = 15, $exclude_id = 0 ) {
     $ids = [];
@@ -18,13 +17,11 @@ function rvp_get_recent_ids( $limit = 15, $exclude_id = 0 ) {
     // We check the cookie directly.
     if ( ! empty( $_COOKIE['woocommerce_recently_viewed'] ) ) {
         $raw = wp_unslash( $_COOKIE['woocommerce_recently_viewed'] );
-        // Your JS saves as pipe separated: "10|20|30"
         $ids = array_filter( array_map( 'absint', explode( '|', $raw ) ) );
     }
 
     if ( empty( $ids ) ) return [];
 
-    // Your JS saves [Old, Middle, New].
     // We reverse it to show [New, Middle, Old].
     $ids = array_reverse( array_values( array_unique( $ids ) ) );
 
@@ -144,8 +141,6 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 
     // LiteSpeed ESI Check
     if ( defined( 'LSCWP_V' ) || class_exists( 'LiteSpeed_Cache' ) ) {
-        // We use cache="private" so it reads the user's specific cookie
-        // We use ttl="0" because the cookie changes via JS on every page load
         echo do_shortcode( '[esi cache="private" ttl="0"]' . $shortcode . '[/esi]' );
     } else {
         echo do_shortcode( $shortcode );
